@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState } from "react";
 import { ResumeSchema } from "@/schema/resume";
 import { generalInfoDefaultValues } from "@/schema/general-info";
 import { personalInfoDefaultValues } from "@/schema/personal-info";
+import { workExperienceDefaultValues } from "@/schema/work-experience";
+import { educationDefaultValues } from "@/schema/education";
 
 export type ResumeContextType = {
   resumeData: ResumeSchema;
@@ -16,6 +18,8 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [resumeData, setResumeData] = useState<ResumeSchema>({
     ...generalInfoDefaultValues,
     ...personalInfoDefaultValues,
+    ...workExperienceDefaultValues,
+    ...educationDefaultValues,
   });
 
   return (
