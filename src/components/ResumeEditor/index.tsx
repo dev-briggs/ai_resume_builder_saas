@@ -6,6 +6,7 @@ import { steps } from "./steps";
 import Breadcrumbs from "./Breadcrumbs";
 import Footer from "./Footer";
 import { ResumeProvider, useResumeContext } from "./context";
+import ResumePreviewSection from "./ResumePreviewSection";
 
 export default function ResumeEditorWrapper() {
   return (
@@ -47,9 +48,7 @@ function ResumeEditor() {
             {FormComponent && <FormComponent />}
           </div>
           <div className="grow md:border-r"></div>
-          <div className="hidden w-1/2 md:flex">
-            <pre>{JSON.stringify(resumeData, null, 2)}</pre>
-          </div>
+          <ResumePreviewSection />
         </div>
       </main>
       <Footer currentStep={currentStep} setCurrentStep={setStep} />

@@ -15,9 +15,9 @@ export const optionalEmailSchema = z
   .or(z.literal(""));
 export const phoneNumberSchema = z
   .string()
-  .nonempty({ message: "Mobile number is required" })
   .refine(
     (number) => {
+      if (!number) return true;
       try {
         const phoneNumber = phoneUtil.parse(number);
         return phoneUtil.isValidNumber(phoneNumber);
@@ -26,4 +26,5 @@ export const phoneNumberSchema = z
       }
     },
     { message: "Invalid mobile number" },
-  );
+  )
+  .optional();
