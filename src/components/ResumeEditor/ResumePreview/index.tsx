@@ -3,6 +3,10 @@ import React, { useRef } from "react";
 import { useResumeContext } from "../context";
 import useDimensions from "@/hooks/useDimensions";
 import PersonalInfoHeader from "./PersonalInfoHeader";
+import SummarySection from "./SummarySection";
+import WorkExperienceSection from "./WorkExperienceSection";
+import EducationSection from "./EducationSection";
+import SkillSection from "./SkillSection";
 
 export type ResumePreviewProps = {
   className?: string;
@@ -31,6 +35,10 @@ export default function ResumePreview({ className }: ResumePreviewProps) {
         }}
       >
         <PersonalInfoHeader />
+        <SummarySection />
+        <WorkExperienceSection />
+        <EducationSection />
+        <SkillSection />
       </div>
     </div>
   );

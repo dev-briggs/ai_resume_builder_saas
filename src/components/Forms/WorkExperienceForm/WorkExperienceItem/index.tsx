@@ -20,7 +20,7 @@ import { format } from "date-fns";
 import { CalendarIcon, GripHorizontal } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { dateFormat } from "@/constants/date";
+import { editorDateFormat } from "@/constants/date";
 import { WorkExperienceSchema } from "@/schema/work-experience";
 
 export type WorkExperienceItemProps = {
@@ -85,7 +85,7 @@ export default function WorkExperienceItem({
                         )}
                       >
                         {field.value ? (
-                          format(field.value, dateFormat)
+                          format(field.value, editorDateFormat)
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -128,7 +128,7 @@ export default function WorkExperienceItem({
                         )}
                       >
                         {field.value ? (
-                          format(field.value, dateFormat)
+                          format(field.value, editorDateFormat)
                         ) : (
                           <span>Pick a date</span>
                         )}

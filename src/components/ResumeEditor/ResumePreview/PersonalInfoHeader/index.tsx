@@ -4,8 +4,18 @@ import { useEffect, useState } from "react";
 
 export default function PersonalInfoHeader() {
   const { resumeData } = useResumeContext();
-  const { photo, firstName, lastName, jobTitle, city, country, phone, email } =
-    resumeData;
+  const {
+    photo,
+    firstName,
+    lastName,
+    jobTitle,
+    city,
+    country,
+    phone,
+    email,
+    colorHex,
+    borderStyle,
+  } = resumeData;
 
   const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
 

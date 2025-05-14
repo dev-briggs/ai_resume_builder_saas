@@ -5,6 +5,7 @@ import { workExperienceSchema } from "./work-experience";
 import { educationSchema } from "./education";
 import { skillSchema } from "./skill";
 import { summarySchema } from "./summary";
+import { optionalStringSchema } from "./common";
 
 export const resumeSchema = z.object({
   ...generalInfoSchema.shape,
@@ -13,6 +14,8 @@ export const resumeSchema = z.object({
   ...educationSchema.shape,
   ...skillSchema.shape,
   ...summarySchema.shape,
+  colorHex: optionalStringSchema,
+  borderStyle: optionalStringSchema,
 });
 
 export type ResumeSchema = Omit<z.infer<typeof resumeSchema>, "photo"> & {

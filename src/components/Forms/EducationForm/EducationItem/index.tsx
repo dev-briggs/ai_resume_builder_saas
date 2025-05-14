@@ -17,7 +17,7 @@ import { CalendarIcon, GripHorizontal } from "lucide-react";
 import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
-import { dateFormat } from "@/constants/date";
+import { editorDateFormat } from "@/constants/date";
 import { EducationSchema } from "@/schema/education";
 import { Button } from "@/components/ui/button";
 
@@ -83,7 +83,7 @@ export default function EducationItem({
                         )}
                       >
                         {field.value ? (
-                          format(field.value, dateFormat)
+                          format(field.value, editorDateFormat)
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -126,7 +126,7 @@ export default function EducationItem({
                         )}
                       >
                         {field.value ? (
-                          format(field.value, dateFormat)
+                          format(field.value, editorDateFormat)
                         ) : (
                           <span>Pick a date</span>
                         )}
