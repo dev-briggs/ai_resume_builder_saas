@@ -4,6 +4,8 @@ import { generalInfoDefaultValues } from "@/schema/general-info";
 import { personalInfoDefaultValues } from "@/schema/personal-info";
 import { workExperienceDefaultValues } from "@/schema/work-experience";
 import { educationDefaultValues } from "@/schema/education";
+import { skillDefaultValues } from "@/schema/skill";
+import { summaryDefaultValues } from "@/schema/summary";
 
 export type ResumeContextType = {
   resumeData: ResumeSchema;
@@ -20,6 +22,8 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({
     ...personalInfoDefaultValues,
     ...workExperienceDefaultValues,
     ...educationDefaultValues,
+    ...skillDefaultValues,
+    ...summaryDefaultValues,
   });
 
   return (

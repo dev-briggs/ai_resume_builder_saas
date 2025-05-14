@@ -24,7 +24,7 @@ export default function EducationForm() {
       if (!isValid) return;
       setResumeData({
         ...resumeData,
-        educations: val.educations?.filter((exp) => !!exp),
+        educations: val.educations?.filter((education) => !!education),
       });
     };
     const debouncedCB = debounce(cb, 300);

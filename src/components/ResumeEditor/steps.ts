@@ -2,6 +2,8 @@ import GeneralInfoForm from "../Forms/GeneralInfoForm";
 import PersonalInfoForm from "../Forms/PersonalInfoForm";
 import WorkExperienceForm from "../Forms/WorkExperienceForm";
 import EducationForm from "../Forms/EducationForm";
+import SkillsForm from "../Forms/SkillsForm";
+import SummaryForm from "../Forms/SummaryForm";
 
 export const steps: Array<{
   title: string;
@@ -16,4 +18,6 @@ export const steps: Array<{
     key: "work-experience",
   },
   { title: "Education", component: EducationForm, key: "education" },
+  { title: "Skills", component: SkillsForm, key: "skills" },
+  { title: "Summary", component: SummaryForm, key: "summary" },
 ];
