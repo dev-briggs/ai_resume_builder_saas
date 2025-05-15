@@ -43,10 +43,12 @@ export default function PersonalInfoHeader() {
       )}
       <div className="space-y-2.5">
         <div className="space-y-1">
-          <p className="text-3xl font-bold">
+          <p className="text-3xl font-bold" style={{ color: colorHex }}>
             {firstName} {lastName}
           </p>
-          <p className="font-medium">{jobTitle}</p>
+          <p className="font-medium" style={{ color: colorHex }}>
+            {jobTitle}
+          </p>
         </div>
         <p className="text-xs text-gray-500">
           {city}
