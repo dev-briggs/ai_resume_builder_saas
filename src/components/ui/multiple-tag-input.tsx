@@ -56,12 +56,12 @@ export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
                 {item}
                 <button
                   type="button"
-                  className="ml-2 w-3"
+                  className="ml-2 w-3 cursor-pointer"
                   onClick={() => {
                     onChange(value.filter((i) => i !== item));
                   }}
                 >
-                  <X className="w-3 cursor-pointer" />
+                  <X className="w-3" />
                 </button>
               </Badge>
             ))}

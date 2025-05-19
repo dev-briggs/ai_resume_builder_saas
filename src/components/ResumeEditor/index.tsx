@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import Breadcrumbs from "./Breadcrumbs";
 import Footer from "./Footer";
-import { ResumeProvider, useResumeContext } from "./context";
+import { ResumeProvider } from "./context";
 import ResumePreviewSection from "./ResumePreviewSection";
+import { cn } from "@/lib/utils";
 
 export default function ResumeEditorWrapper() {
   return (
@@ -20,7 +21,7 @@ function ResumeEditor() {
   const searchParams = useSearchParams();
   const currentStep = searchParams.get("step") || steps[0].key;
 
-  const { resumeData } = useResumeContext();
+  const [showSmResumePreview, setShowSmResumePreview] = useState(false);
 
   function setStep(key: string) {
     const newSearchParams = new URLSearchParams(searchParams.toString());
@@ -43,15 +44,26 @@ function ResumeEditor() {
       </header>
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
-          <div className="w-full space-y-6 overflow-y-auto p-3 md:w-1/2">
+          <div
+            className={cn(
+              "w-full space-y-6 overflow-y-auto p-3",
+              "md:block md:w-1/2",
+              showSmResumePreview && "hidden",
+            )}
+          >
             <Breadcrumbs currentStep={currentStep} setCurrentStep={setStep} />
             {FormComponent && <FormComponent />}
           </div>
           <div className="grow md:border-r"></div>
-          <ResumePreviewSection />
+          <ResumePreviewSection className={cn(showSmResumePreview && "flex")} />
         </div>
       </main>
-      <Footer currentStep={currentStep} setCurrentStep={setStep} />
+      <Footer
+        currentStep={currentStep}
+        setCurrentStep={setStep}
+        showSmResumePreview={showSmResumePreview}
+        setShowSmResumePreview={setShowSmResumePreview}
+      />
     </div>
   );
 }

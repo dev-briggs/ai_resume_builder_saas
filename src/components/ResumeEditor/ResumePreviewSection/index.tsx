@@ -5,12 +5,24 @@ import ColorPicker from "@/components/ui/color-picker";
 import { cn } from "@/lib/utils";
 import BorderStyleSelector from "./BorderStyleSelector";
 
-export default function ResumePreviewSection() {
+export type ResumePreviewSectionProps = {
+  className?: string;
+};
+
+export default function ResumePreviewSection({
+  className,
+}: ResumePreviewSectionProps) {
   const { resumeData, setResumeData } = useResumeContext();
   const { colorHex, borderStyle } = resumeData;
 
   return (
-    <div className="group relative hidden w-1/2 md:flex">
+    <div
+      className={cn(
+        "group relative hidden w-full",
+        "md:flex md:w-1/2",
+        className,
+      )}
+    >
       <div
         className={cn(
           "absolute top-1 left-1 flex flex-none flex-col gap-3 opacity-50",

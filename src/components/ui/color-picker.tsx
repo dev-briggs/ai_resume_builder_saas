@@ -13,7 +13,7 @@ export default function ColorPicker({ color, onChange }: ColorPickerProps) {
   const [showPopover, setShowPopover] = useState(false);
   return (
     <Popover open={showPopover} onOpenChange={setShowPopover}>
-      <PopoverTrigger className="cursor-pointer" asChild>
+      <PopoverTrigger asChild>
         <Button
           variant="outline"
           size="icon"
