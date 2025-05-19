@@ -1,3 +1,24 @@
+import React, { useEffect } from "react";
+import { debounce } from "lodash-es";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useFieldArray, useForm } from "react-hook-form";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+
 import { useResumeContext } from "@/components/ResumeEditor/context";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -5,10 +26,6 @@ import {
   workExperienceSchema,
   WorkExperienceSchema,
 } from "@/schema/work-experience";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { debounce } from "lodash-es";
-import React, { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
 import WorkExperienceItem from "./WorkExperienceItem";
 
 export default function WorkExperienceForm() {
@@ -40,10 +57,29 @@ export default function WorkExperienceForm() {
     };
   }, [form, resumeData, setResumeData]);
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control: form.control,
     name: "workExperiences",
   });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = fields.findIndex((field) => field.id === active.id);
+    const newIndex = fields.findIndex((field) => field.id === over.id);
+    move(oldIndex, newIndex);
+    return arrayMove(fields, oldIndex, newIndex);
+  }
+
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="5 space-y-1 text-center">
@@ -55,14 +91,27 @@ export default function WorkExperienceForm() {
 
       <Form {...form}>
         <form className="space-y-3">
-          {fields.map((item, index) => (
-            <WorkExperienceItem
-              key={item.id}
-              index={index}
-              form={form}
-              remove={remove}
-            />
-          ))}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
+          >
+            <SortableContext
+              items={fields}
+              strategy={verticalListSortingStrategy}
+            >
+              {fields.map((field, index) => (
+                <WorkExperienceItem
+                  key={field.id}
+                  id={field.id}
+                  index={index}
+                  form={form}
+                  remove={remove}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
           <div className="flex justify-center">
             <Button
               type="button"

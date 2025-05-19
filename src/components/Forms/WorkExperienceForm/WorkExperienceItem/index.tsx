@@ -1,4 +1,9 @@
 import { UseFormReturn } from "react-hook-form";
+import { format } from "date-fns";
+import { CalendarIcon, GripHorizontal } from "lucide-react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 import {
   FormControl,
   FormDescription,
@@ -16,29 +21,51 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
-import { CalendarIcon, GripHorizontal } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { editorDateFormat } from "@/constants/date";
 import { WorkExperienceSchema } from "@/schema/work-experience";
 
 export type WorkExperienceItemProps = {
+  id: string;
   index: number;
   form: UseFormReturn<WorkExperienceSchema>;
   remove: (index: number) => void;
 };
 
 export default function WorkExperienceItem({
+  id,
   index,
   form,
   remove,
 }: WorkExperienceItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
   return (
-    <div className="bg-background space-y-3 rounded-md border p-3">
+    <div
+      ref={setNodeRef}
+      className={cn(
+        "bg-background space-y-3 rounded-md border p-3",
+        isDragging && "relative z-50 cursor-grab shadow-xl",
+      )}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }}
+    >
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Work experience {index + 1}</span>
-        <GripHorizontal className="text-muted-foreground size-5 cursor-grab" />
+        <GripHorizontal
+          className="text-muted-foreground size-5 cursor-grab"
+          {...attributes}
+          {...listeners}
+        />
       </div>
       <FormField
         control={form.control}
