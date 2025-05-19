@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useResumeContext } from "../../context";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { BORDER_STYLES } from "@/schema/resume";
 
 export default function PersonalInfoHeader() {
   const { resumeData } = useResumeContext();
@@ -30,6 +31,17 @@ export default function PersonalInfoHeader() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [photo]);
 
+  const borderRadius = useMemo(() => {
+    switch (borderStyle) {
+      case "square":
+        return "0px";
+      case "circle":
+        return "9999px";
+      default:
+        return "10%";
+    }
+  }, [borderStyle]);
+
   return (
     <div className="flex items-center gap-6">
       {photoSrc && (
@@ -39,6 +51,7 @@ export default function PersonalInfoHeader() {
           height={100}
           alt="Author photo"
           className="aspect-square object-cover"
+          style={{ borderRadius }}
         />
       )}
       <div className="space-y-2.5">

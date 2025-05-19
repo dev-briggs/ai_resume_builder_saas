@@ -11,11 +11,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { personalInfoSchema, PersonalInfoSchema } from "@/schema/personal-info";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Country, CountryDropdown } from "@/components/ui/country-dropdown";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { useResumeContext } from "@/components/ResumeEditor/context";
+import { Button } from "@/components/ui/button";
 
 export default function PersonalInfoForm() {
   const { resumeData, setResumeData } = useResumeContext();
@@ -32,6 +33,8 @@ export default function PersonalInfoForm() {
       email: resumeData.email,
     },
   });
+
+  const photoInputRef = useRef<HTMLInputElement>(null);
 
   const [selectedCountry, setSelectedCountry] = React.useState<Country | null>(
     null,
@@ -66,17 +69,31 @@ export default function PersonalInfoForm() {
             render={({ field: { value, ...fieldValues } }) => (
               <FormItem>
                 <FormLabel>Your photo</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    {...fieldValues}
-                    onChange={(e) => {
-                      const files = e.target.files;
-                      fieldValues.onChange(files ? files[0] : null); // event returns a FileList but schema only supports File
+                <div className="flex items-center gap-2">
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      {...fieldValues}
+                      onChange={(e) => {
+                        const files = e.target.files;
+                        fieldValues.onChange(files ? files[0] : null); // event returns a FileList but schema only supports File
+                      }}
+                      ref={photoInputRef}
+                    />
+                  </FormControl>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => {
+                      fieldValues.onChange(null);
+                      if (photoInputRef.current)
+                        photoInputRef.current.value = "";
                     }}
-                  />
-                </FormControl>
+                  >
+                    Remove
+                  </Button>
+                </div>
                 <FormMessage />
               </FormItem>
             )}

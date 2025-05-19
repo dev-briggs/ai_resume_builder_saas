@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useResumeContext } from "../../context";
 import { Badge } from "@/components/ui/badge";
 
 export default function SkillSection() {
   const { resumeData } = useResumeContext();
-  const { skills, colorHex } = resumeData;
+  const { skills, colorHex, borderStyle } = resumeData;
+
+  const borderRadius = useMemo(() => {
+    switch (borderStyle) {
+      case "square":
+        return "0px";
+      case "circle":
+        return "9999px";
+      default:
+        return "8px";
+    }
+  }, [borderStyle]);
 
   if (!skills?.length) return null;
 
@@ -20,7 +31,7 @@ export default function SkillSection() {
             <Badge
               key={i}
               className="rounded-md bg-black text-white"
-              style={{ backgroundColor: colorHex }}
+              style={{ backgroundColor: colorHex, borderRadius }}
             >
               {skill}
             </Badge>

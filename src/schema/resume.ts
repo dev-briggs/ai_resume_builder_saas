@@ -7,6 +7,9 @@ import { skillSchema } from "./skill";
 import { summarySchema } from "./summary";
 import { optionalStringSchema } from "./common";
 
+export const BORDER_STYLES = ["square", "circle", "squircle"] as const;
+export const BorderStylesEnum = z.enum(BORDER_STYLES)
+
 export const resumeSchema = z.object({
   ...generalInfoSchema.shape,
   ...personalInfoSchema.shape,
@@ -15,7 +18,7 @@ export const resumeSchema = z.object({
   ...skillSchema.shape,
   ...summarySchema.shape,
   colorHex: optionalStringSchema,
-  borderStyle: optionalStringSchema,
+  borderStyle: BorderStylesEnum,
 });
 
 export type ResumeSchema = Omit<z.infer<typeof resumeSchema>, "photo"> & {
