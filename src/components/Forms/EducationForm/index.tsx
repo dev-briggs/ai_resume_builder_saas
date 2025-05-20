@@ -1,10 +1,27 @@
+import React, { useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { debounce } from "lodash-es";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+
 import { useResumeContext } from "@/components/ResumeEditor/context";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { educationSchema, EducationSchema } from "@/schema/education";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { debounce } from "lodash-es";
-import React, { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import EducationItem from "./EducationItem";
 
@@ -37,10 +54,28 @@ export default function EducationForm() {
     };
   }, [form, resumeData, setResumeData]);
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control: form.control,
     name: "educations",
   });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = fields.findIndex((field) => field.id === active.id);
+    const newIndex = fields.findIndex((field) => field.id === over.id);
+    move(oldIndex, newIndex);
+    return arrayMove(fields, oldIndex, newIndex);
+  }
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
@@ -53,14 +88,27 @@ export default function EducationForm() {
 
       <Form {...form}>
         <form className="space-y-3">
-          {fields.map((item, index) => (
-            <EducationItem
-              key={item.id}
-              index={index}
-              form={form}
-              remove={remove}
-            />
-          ))}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
+          >
+            <SortableContext
+              items={fields}
+              strategy={verticalListSortingStrategy}
+            >
+              {fields.map((field, index) => (
+                <EducationItem
+                  key={field.id}
+                  id={field.id}
+                  index={index}
+                  form={form}
+                  remove={remove}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
           <div className="flex justify-center">
             <Button
               type="button"
