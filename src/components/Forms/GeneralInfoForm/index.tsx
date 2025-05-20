@@ -27,11 +27,12 @@ export default function GeneralInfoForm() {
   });
 
   useEffect(() => {
-    const debouncedCB = debounce(async (val) => {
+    const cb: Parameters<typeof form.watch>[0] = async (val) => {
       const isValid = await form.trigger(); // trigger validation because we bypass normal submission via the form submit button
       if (!isValid) return;
       setResumeData({ ...resumeData, ...val });
-    }, 300);
+    };
+    const debouncedCB = debounce(cb, 300);
 
     const { unsubscribe } = form.watch(debouncedCB);
 

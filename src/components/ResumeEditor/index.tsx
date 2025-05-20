@@ -5,9 +5,11 @@ import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import Breadcrumbs from "./Breadcrumbs";
 import Footer from "./Footer";
-import { ResumeProvider } from "./context";
+import { ResumeProvider, useResumeContext } from "./context";
 import ResumePreviewSection from "./ResumePreviewSection";
 import { cn } from "@/lib/utils";
+import useAutoSaveResume from "@/hooks/useAutoSaveResume";
+import useUnloadWarning from "@/hooks/useUnloadWarning";
 
 export default function ResumeEditorWrapper() {
   return (
@@ -21,7 +23,13 @@ function ResumeEditor() {
   const searchParams = useSearchParams();
   const currentStep = searchParams.get("step") || steps[0].key;
 
+  const { resumeData } = useResumeContext();
+
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
+
+  const { isSaving, hasUnsavedChanges } = useAutoSaveResume(resumeData);
+
+  useUnloadWarning(hasUnsavedChanges);
 
   function setStep(key: string) {
     const newSearchParams = new URLSearchParams(searchParams.toString());
@@ -63,6 +71,7 @@ function ResumeEditor() {
         setCurrentStep={setStep}
         showSmResumePreview={showSmResumePreview}
         setShowSmResumePreview={setShowSmResumePreview}
+        isSaving={isSaving}
       />
     </div>
   );
