@@ -8,7 +8,7 @@ import { summarySchema } from "./summary";
 import { optionalStringSchema } from "./common";
 
 export const BORDER_STYLES = ["square", "circle", "squircle"] as const;
-export const BorderStylesEnum = z.enum(BORDER_STYLES)
+export const BorderStylesEnum = z.enum(BORDER_STYLES).optional();
 
 export const resumeSchema = z.object({
   ...generalInfoSchema.shape,
