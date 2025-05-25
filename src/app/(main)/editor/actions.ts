@@ -33,15 +33,21 @@ export async function saveResume(values: ResumeSchema) {
   let newPhotoUrl: string | undefined | null = undefined;
 
   if (photo instanceof File) {
-    const blob = await put(
-      `resume_photos/${path.basename(photo.name)}`,
-      photo,
-      {
-        access: "public",
-      },
-    );
-
-    newPhotoUrl = blob.url;
+    try {
+      const blob = await put(
+        `resume_photos/${userId}/${path.basename(photo.name)}`,
+        photo,
+        {
+          access: "public",
+        },
+      );
+      newPhotoUrl = blob.url;
+    } catch (e) {
+      console.error("vercel blob put error:", e);
+      throw new Error(
+        e instanceof Error ? e.message : "Failed to upload photo.",
+      );
+    }
   } else if (photo === null) {
     newPhotoUrl = null;
   }

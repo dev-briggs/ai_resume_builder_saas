@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { saveResume } from "@/app/(main)/editor/actions";
 import { Button } from "@/components/ui/button";
+import { fileReplacer } from "@/lib/utils";
 
 export default function useAutoSaveResume(resumeData: ResumeSchema) {
   const searchParams = useSearchParams();
@@ -33,7 +34,8 @@ export default function useAutoSaveResume(resumeData: ResumeSchema) {
 
         const updatedResume = await saveResume({
           ...newData,
-          ...(lastSavedData.photo?.toString() === newData.photo?.toString() && {
+          ...(JSON.stringify(lastSavedData.photo, fileReplacer) ===
+            JSON.stringify(newData.photo, fileReplacer) && {
             photo: undefined,
           }),
           id: resumeId,
@@ -52,11 +54,13 @@ export default function useAutoSaveResume(resumeData: ResumeSchema) {
           );
         }
       } catch (e) {
+        const errorMessage =
+          e instanceof Error ? e.message : "Could not save changes";
+        console.error("saveResume error:", e);
         setHasError(true);
-        console.log(e);
         toast.error(
           <div className="space-y-3">
-            <p>Could not save changes.</p>
+            <p>{errorMessage}</p>
             <Button
               variant="secondary"
               onClick={() => {
@@ -74,7 +78,8 @@ export default function useAutoSaveResume(resumeData: ResumeSchema) {
     }
 
     const hasUnsavedChanges =
-      JSON.stringify(debouncedResumeData) !== JSON.stringify(lastSavedData);
+      JSON.stringify(debouncedResumeData, fileReplacer) !==
+      JSON.stringify(lastSavedData, fileReplacer);
 
     if (debouncedResumeData && hasUnsavedChanges && !isSaving && !hasError)
       save();
@@ -91,6 +96,7 @@ export default function useAutoSaveResume(resumeData: ResumeSchema) {
   return {
     isSaving,
     hasUnsavedChanges:
-      JSON.stringify(resumeData) !== JSON.stringify(lastSavedData),
+      JSON.stringify(resumeData, fileReplacer) !==
+      JSON.stringify(lastSavedData, fileReplacer),
   };
 }
