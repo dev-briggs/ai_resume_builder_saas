@@ -10,10 +10,17 @@ import ResumePreviewSection from "./ResumePreviewSection";
 import { cn } from "@/lib/utils";
 import useAutoSaveResume from "@/hooks/useAutoSaveResume";
 import useUnloadWarning from "@/hooks/useUnloadWarning";
+import { ResumeSchema } from "@/schema/resume";
 
-export default function ResumeEditorWrapper() {
+export type ResumeEditorWrapperProps = {
+  resumeToEdit: ResumeSchema | null;
+};
+
+export default function ResumeEditorWrapper({
+  resumeToEdit,
+}: ResumeEditorWrapperProps) {
   return (
-    <ResumeProvider>
+    <ResumeProvider resumeToEdit={resumeToEdit}>
       <ResumeEditor />
     </ResumeProvider>
   );

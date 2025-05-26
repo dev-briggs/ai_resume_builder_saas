@@ -29,6 +29,7 @@ export const personalInfoSchema = z.object({
   jobTitle: optionalStringSchema,
   country: z
     .enum(Object.keys(countries) as [string, ...string[]])
+    .optional()
     .or(z.literal("")),
   city: optionalStringSchema,
   phone: phoneNumberSchema,

@@ -6,6 +6,7 @@ import { educationSchema } from "./education";
 import { skillSchema } from "./skill";
 import { summarySchema } from "./summary";
 import { optionalStringSchema } from "./common";
+import { Prisma } from "@prisma/client";
 
 export const BORDER_STYLES = ["square", "circle", "squircle"] as const;
 export const BorderStylesEnum = z.enum(BORDER_STYLES).optional();
@@ -25,3 +26,12 @@ export type ResumeSchema = Omit<z.infer<typeof resumeSchema>, "photo"> & {
   id?: string;
   photo?: File | string | null;
 };
+
+export const resumeDataInclude = {
+  workExperiences: true,
+  educations: true,
+} satisfies Prisma.ResumeInclude;
+
+export type ResumeServerData = Prisma.ResumeGetPayload<{
+  include: typeof resumeDataInclude;
+}>;

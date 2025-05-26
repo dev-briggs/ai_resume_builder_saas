@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { ResumeSchema } from "@/schema/resume";
 import { generalInfoDefaultValues } from "@/schema/general-info";
 import { personalInfoDefaultValues } from "@/schema/personal-info";
@@ -14,17 +14,26 @@ export type ResumeContextType = {
 
 const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
 
-export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({
+export type ResumeProviderProps = {
+  resumeToEdit: ResumeSchema | null;
+  children: React.ReactNode;
+};
+
+export const ResumeProvider: React.FC<ResumeProviderProps> = ({
+  resumeToEdit,
   children,
 }) => {
-  const [resumeData, setResumeData] = useState<ResumeSchema>({
+  const resumeDataDefaultValue = {
     ...generalInfoDefaultValues,
     ...personalInfoDefaultValues,
     ...workExperienceDefaultValues,
     ...educationDefaultValues,
     ...skillDefaultValues,
     ...summaryDefaultValues,
-  });
+  };
+  const [resumeData, setResumeData] = useState<ResumeSchema>(
+    resumeToEdit ? resumeToEdit : resumeDataDefaultValue,
+  );
 
   return (
     <ResumeContext.Provider value={{ resumeData, setResumeData }}>

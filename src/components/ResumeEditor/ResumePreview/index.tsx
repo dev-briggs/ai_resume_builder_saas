@@ -14,7 +14,7 @@ export type ResumePreviewProps = {
 
 export default function ResumePreview({ className }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const { resumeData } = useResumeContext();
   const { width } = useDimensions(containerRef);
 
   return (
@@ -34,6 +34,7 @@ export default function ResumePreview({ className }: ResumePreviewProps) {
             width,
         }}
       >
+        <pre>{JSON.stringify(resumeData, null, 2)}</pre>
         <PersonalInfoHeader />
         <SummarySection />
         <WorkExperienceSection />
