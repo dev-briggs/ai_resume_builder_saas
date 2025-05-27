@@ -1,8 +1,8 @@
 import { useResumeContext } from "@/components/ResumeEditor/context";
+import GenerateSummaryButton from "@/components/ResumeEditor/GenerateSummaryButton";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -69,6 +69,11 @@ export default function SummaryForm() {
                   />
                 </FormControl>
                 <FormMessage />
+                <GenerateSummaryButton
+                  onSummaryGenerated={(summary) =>
+                    form.setValue("summary", summary)
+                  }
+                />
               </FormItem>
             )}
           />

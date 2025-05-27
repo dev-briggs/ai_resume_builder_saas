@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import React, { useRef } from "react";
-import { useResumeContext } from "../context";
 import useDimensions from "@/hooks/useDimensions";
 import PersonalInfoHeader from "./PersonalInfoHeader";
 import SummarySection from "./SummarySection";
@@ -14,7 +13,6 @@ export type ResumePreviewProps = {
 
 export default function ResumePreview({ className }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { resumeData } = useResumeContext();
   const { width } = useDimensions(containerRef);
 
   return (
@@ -34,7 +32,6 @@ export default function ResumePreview({ className }: ResumePreviewProps) {
             width,
         }}
       >
-        <pre>{JSON.stringify(resumeData, null, 2)}</pre>
         <PersonalInfoHeader />
         <SummarySection />
         <WorkExperienceSection />
