@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { editorDateFormat } from "@/constants/date";
 import { WorkExperienceSchema } from "@/schema/work-experience";
+import GenerateWorkExperienceButton from "@/components/ResumeEditor/GenerateWorkExperienceButton";
 
 export type WorkExperienceItemProps = {
   id: string;
@@ -67,6 +68,15 @@ export default function WorkExperienceItem({
           {...listeners}
         />
       </div>
+
+      <div className="flex-justify">
+        <GenerateWorkExperienceButton
+          onWorkExperienceGenerated={(workExperience) =>
+            form.setValue(`workExperiences.${index}`, workExperience)
+          }
+        />
+      </div>
+
       <FormField
         control={form.control}
         name={`workExperiences.${index}.position`}

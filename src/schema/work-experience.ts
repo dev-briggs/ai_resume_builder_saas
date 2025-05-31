@@ -36,6 +36,22 @@ export const workExperienceSchema = z.object({
 
 export type WorkExperienceSchema = z.infer<typeof workExperienceSchema>;
 
+export type WorkExperienceItem = NonNullable<
+  z.infer<typeof workExperienceSchema>["workExperiences"]
+>[number];
+
 export const workExperienceDefaultValues = {
   workExperiences: [],
 };
+
+export const generateWorkExperienceSchema = z.object({
+  description: z
+    .string()
+    .trim()
+    .min(1, "Required")
+    .min(20, "Must be at least 20 characters"),
+});
+
+export type GenerateWorkExperienceSchema = z.infer<
+  typeof generateWorkExperienceSchema
+>;

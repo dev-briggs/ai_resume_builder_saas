@@ -1,80 +1,49 @@
 "use server";
 
 import openai from "@/lib/openai";
+import {
+  GENERATE_SUMMARY_SYSTEM_MESSAGE,
+  GENERATE_WORK_EXPERIENCE_SYSTEM_MESSAGE,
+} from "@/prompts/system-message";
+import {
+  generateSummaryUserMessage,
+  generateWorkExperienceUserMessage,
+} from "@/prompts/user-message";
 import { generateSummarySchema, GenerateSummarySchema } from "@/schema/summary";
+import {
+  GenerateWorkExperienceSchema,
+  generateWorkExperienceSchema,
+  WorkExperienceItem,
+} from "@/schema/work-experience";
 
 export async function generateSummary(input: GenerateSummarySchema) {
   // TODO: Block for non-premium users
+
   const { jobTitle, workExperiences, educations, skills } =
     generateSummarySchema.parse(input);
 
-  const systemMessage = `
-  TASK:
-  Your task is to write a professional introduction summary for a job resume based on the provided information.
+  const userMessage = generateSummaryUserMessage({
+    jobTitle,
+    workExperiences,
+    educations,
+    skills,
+  });
 
-  CONTEXT:
-  You are a job resume generator AI.
-
-  REQUIREMENTS:
-  The summary should be concise, engaging, and tailored to highlight the candidate's qualifications and experiences relevant to the job title.
-  Only return the summary text without any additional explanations or formatting.
-  The summary should be written in a professional tone, suitable for a job application.
-  `;
-
-  const userMessage = `
-  Please generate a professional introduction summary for a job resume based on the following information.
-  
-    Job Title: ${jobTitle || "N/A"}
-
-    Work Experiences: 
-    ${
-      workExperiences
-        ? workExperiences
-            .map(
-              (exp) => `
-          Position: ${exp.position || "N/A"} at ${exp.company || "N/A"} from ${exp.startDate || "N/A"} to ${exp.endDate || "Present"}
-          
-          Description: ${exp.description || "N/A"}
-            `,
-            )
-            .join("\n\n")
-        : "None"
-    }
-
-    Education: 
-    ${
-      educations
-        ? educations
-            .map(
-              (edu) => `
-        Degree: ${edu.degree || "N/A"} at ${edu.school || "N/A"} from ${edu.startDate || "N/A"} to ${edu.endDate || "N/A"}
-        `,
-            )
-            .join("\n\n")
-        : "None"
-    }
-
-    Skills:
-    ${
-      skills && skills.length > 0
-        ? skills.map((skill) => `- ${skill}`).join("\n")
-        : "None"
-    }
-  `;
-
-  console.log("systemMessage:", systemMessage);
+  console.log("systemMessage:", GENERATE_SUMMARY_SYSTEM_MESSAGE);
   console.log("userMessage:", userMessage);
 
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: systemMessage },
+        { role: "system", content: GENERATE_SUMMARY_SYSTEM_MESSAGE },
         { role: "user", content: userMessage },
       ],
     });
 
     const aiResponse = completion.choices[0].message.content;
+
+    console.log("AI response:", aiResponse);
 
     if (!aiResponse) {
       throw new Error(
@@ -87,6 +56,58 @@ export async function generateSummary(input: GenerateSummarySchema) {
       e instanceof Error
         ? e.message
         : "Failed to generate summary. Please try again later.",
+    );
+  }
+}
+
+export async function generateWorkExperience(
+  input: GenerateWorkExperienceSchema,
+) {
+  // TODO: Block for non-premium users
+
+  const { description } = generateWorkExperienceSchema.parse(input);
+
+  const userMessage = generateWorkExperienceUserMessage(description);
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: GENERATE_WORK_EXPERIENCE_SYSTEM_MESSAGE },
+        { role: "user", content: userMessage },
+      ],
+    });
+
+    const aiResponse = completion.choices[0].message.content;
+
+    console.log("AI response:", aiResponse);
+
+    if (!aiResponse) {
+      throw new Error(
+        "AI response is empty. Please ensure the input data is complete and try again.",
+      );
+    }
+
+    const startDateString = aiResponse.match(
+      /Start date: (\d{4}-\d{2}-\d{2})/,
+    )?.[1];
+    const endDateString = aiResponse.match(
+      /End date: (\d{4}-\d{2}-\d{2})/,
+    )?.[1];
+
+    return {
+      position: aiResponse.match(/Job title: (.*)/)?.[1] || "",
+      company: aiResponse.match(/Company: (.*)/)?.[1] || "",
+      description: (
+        aiResponse.match(/Description:([\s\S]*)/)?.[1] || ""
+      ).trim(),
+      startDate: startDateString ? new Date(startDateString) : undefined,
+      endDate: endDateString ? new Date(endDateString) : undefined,
+    } satisfies WorkExperienceItem;
+  } catch (e) {
+    throw new Error(
+      e instanceof Error
+        ? e.message
+        : "Failed to generate work experience. Please try again later.",
     );
   }
 }
