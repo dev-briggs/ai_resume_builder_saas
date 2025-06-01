@@ -7,6 +7,7 @@ import { formatDate } from "date-fns";
 import { timestampDateFormat } from "@/constants/date";
 import ResumePreview from "@/components/ResumeEditor/ResumePreview";
 import { mapServerToClientResumeValues } from "@/lib/utils";
+import { MoreMenu } from "./MoreMenu";
 
 export type ResumeItemProps = {
   resume: ResumeServerData;
@@ -15,7 +16,7 @@ export type ResumeItemProps = {
 export default function ResumeItem({ resume }: ResumeItemProps) {
   const wasUpdated = resume.updatedAt !== resume.createdAt;
   return (
-    <div className="group hover:border-border bg-secondary rounded-lg border border-transparent p-3 transition-colors">
+    <div className="group hover:border-border bg-secondary relative rounded-lg border border-transparent p-3 transition-colors">
       <div className="space-y-3">
         <Link
           href={`/editor?resumeId=${resume.id}`}
@@ -43,6 +44,7 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </Link>
       </div>
+      <MoreMenu resumeId={resume.id} />
     </div>
   );
 }
