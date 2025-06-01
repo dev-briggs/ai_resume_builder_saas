@@ -1,4 +1,4 @@
-import { useResumeContext } from "@/components/ResumeEditor/context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 import GenerateSummaryButton from "@/components/ResumeEditor/GenerateSummaryButton";
 import {
   Form,
@@ -16,7 +16,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export default function SummaryForm() {
-  const { resumeData, setResumeData } = useResumeContext();
+  const { resumeData, setResumeData } = useResumeEditorContext();
 
   const form = useForm<SummarySchema>({
     resolver: zodResolver(summarySchema),

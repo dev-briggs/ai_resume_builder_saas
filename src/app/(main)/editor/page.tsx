@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import prisma from "@/lib/prisma-client";
 import { auth } from "@clerk/nextjs/server";
 import { resumeDataInclude } from "@/schema/resume";
-import ResumeEditorWrapper from "@/components/ResumeEditor";
 import { mapServerToClientResumeValues } from "@/lib/utils";
+import ResumeEditor from "@/components/ResumeEditor";
 
 export type PageProps = {
   searchParams: Promise<{
@@ -30,8 +30,8 @@ export default async function Page({ searchParams }: PageProps) {
     : null;
 
   const mappedResumeToEdit = resumeToEdit
-    ? await mapServerToClientResumeValues(resumeToEdit)
+    ? mapServerToClientResumeValues(resumeToEdit)
     : null;
 
-  return <ResumeEditorWrapper resumeToEdit={mappedResumeToEdit} />;
+  return <ResumeEditor resumeToEdit={mappedResumeToEdit} />;
 }

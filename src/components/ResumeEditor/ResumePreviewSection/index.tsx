@@ -1,5 +1,5 @@
 import React from "react";
-import { useResumeContext } from "../context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 import ResumePreview from "../ResumePreview";
 import ColorPicker from "@/components/ui/color-picker";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,7 @@ export type ResumePreviewSectionProps = {
 export default function ResumePreviewSection({
   className,
 }: ResumePreviewSectionProps) {
-  const { resumeData, setResumeData } = useResumeContext();
+  const { resumeData, setResumeData } = useResumeEditorContext();
   const { colorHex, borderStyle } = resumeData;
 
   return (
@@ -45,7 +45,7 @@ export default function ResumePreviewSection({
         />
       </div>
       <div className="bg-secondary flex w-full justify-center overflow-y-auto p-3">
-        <ResumePreview className="max-w-2xl shadow-md" />
+        <ResumePreview resumeData={resumeData} className="max-w-2xl shadow-md" />
       </div>
     </div>
   );

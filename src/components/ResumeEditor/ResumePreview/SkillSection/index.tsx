@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
-import { useResumeContext } from "../../context";
+import { useResumePreviewContext } from "@/components/ResumeEditor/ResumePreview";
 import { Badge } from "@/components/ui/badge";
 
 export default function SkillSection() {
-  const { resumeData } = useResumeContext();
+  const { resumeData } = useResumePreviewContext();
   const { skills, colorHex, borderStyle } = resumeData;
 
   const borderRadius = useMemo(() => {

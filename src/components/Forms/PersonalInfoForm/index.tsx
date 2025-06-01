@@ -15,11 +15,11 @@ import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Country, CountryDropdown } from "@/components/ui/country-dropdown";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { useResumeContext } from "@/components/ResumeEditor/context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 import { Button } from "@/components/ui/button";
 
 export default function PersonalInfoForm() {
-  const { resumeData, setResumeData } = useResumeContext();
+  const { resumeData, setResumeData } = useResumeEditorContext();
 
   const form = useForm<PersonalInfoSchema>({
     resolver: zodResolver(personalInfoSchema),

@@ -1,4 +1,4 @@
-import { useResumeContext } from "@/components/ResumeEditor/context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 import {
   Form,
   FormControl,
@@ -16,7 +16,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export default function SkillsForm() {
-  const { resumeData, setResumeData } = useResumeContext();
+  const { resumeData, setResumeData } = useResumeEditorContext();
 
   const form = useForm<SkillSchema>({
     resolver: zodResolver(skillSchema),

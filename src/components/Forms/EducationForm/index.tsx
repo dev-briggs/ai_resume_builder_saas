@@ -18,7 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
-import { useResumeContext } from "@/components/ResumeEditor/context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { educationSchema, EducationSchema } from "@/schema/education";
@@ -26,7 +26,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import EducationItem from "./EducationItem";
 
 export default function EducationForm() {
-  const { resumeData, setResumeData } = useResumeContext();
+  const { resumeData, setResumeData } = useResumeEditorContext();
 
   const form = useForm<EducationSchema>({
     resolver: zodResolver(educationSchema),

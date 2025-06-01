@@ -1,8 +1,8 @@
 import React from "react";
-import { useResumeContext } from "../../context";
+import { useResumePreviewContext } from "@/components/ResumeEditor/ResumePreview";
 
 export default function SummarySection() {
-  const { resumeData } = useResumeContext();
+  const { resumeData } = useResumePreviewContext();
   const { summary, colorHex } = resumeData;
   return (
     <>
@@ -11,7 +11,9 @@ export default function SummarySection() {
         <p className="text-lg font-semibold" style={{ color: colorHex }}>
           Professional Profile
         </p>
-        <div className="text-sm whitespace-pre-line">{summary}</div>
+        <div className="text-sm wrap-break-word whitespace-pre-line">
+          {summary}
+        </div>
       </div>
     </>
   );

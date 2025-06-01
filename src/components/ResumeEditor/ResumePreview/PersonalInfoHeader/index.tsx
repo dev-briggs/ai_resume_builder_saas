@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { useResumeContext } from "../../context";
 import { useEffect, useMemo, useState } from "react";
-import { BORDER_STYLES } from "@/schema/resume";
+import { useResumePreviewContext } from "@/components/ResumeEditor/ResumePreview";
 
 export default function PersonalInfoHeader() {
-  const { resumeData } = useResumeContext();
+  const { resumeData } = useResumePreviewContext();
   const {
     photo,
     firstName,

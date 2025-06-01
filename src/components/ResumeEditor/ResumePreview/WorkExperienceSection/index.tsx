@@ -1,10 +1,10 @@
 import React from "react";
 import { format } from "date-fns";
-import { useResumeContext } from "../../context";
+import { useResumePreviewContext } from "@/components/ResumeEditor/ResumePreview";
 import { previewDateFormat } from "@/constants/date";
 
 export default function WorkExperienceSection() {
-  const { resumeData } = useResumeContext();
+  const { resumeData } = useResumePreviewContext();
   const { workExperiences, colorHex } = resumeData;
   const hasWorkExperience = workExperiences?.filter(
     (exp) => Object.values(exp).filter(Boolean).length > 0,

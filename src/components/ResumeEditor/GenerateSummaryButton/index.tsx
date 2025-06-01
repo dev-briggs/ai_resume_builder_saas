@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "sonner";
-import { useResumeContext } from "../context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 import LoadingButton from "@/components/ui/loading-button";
 import { WandSparklesIcon } from "lucide-react";
 import { generateSummary } from "@/app/(main)/editor/forms/actions";
@@ -12,7 +12,7 @@ export type GenerateSummaryButtonProps = {
 export default function GenerateSummaryButton({
   onSummaryGenerated,
 }: GenerateSummaryButtonProps) {
-  const { resumeData } = useResumeContext();
+  const { resumeData } = useResumeEditorContext();
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {

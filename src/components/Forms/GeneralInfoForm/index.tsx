@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { debounce } from "lodash-es";
-import { useResumeContext } from "@/components/ResumeEditor/context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 
 export default function GeneralInfoForm() {
-  const { resumeData, setResumeData } = useResumeContext();
+  const { resumeData, setResumeData } = useResumeEditorContext();
 
   const form = useForm<GeneralInfoSchema>({
     resolver: zodResolver(generalInfoSchema),

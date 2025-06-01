@@ -19,7 +19,7 @@ import {
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
-import { useResumeContext } from "@/components/ResumeEditor/context";
+import { useResumeEditorContext } from "@/components/ResumeEditor";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import {
@@ -29,7 +29,7 @@ import {
 import WorkExperienceItem from "./WorkExperienceItem";
 
 export default function WorkExperienceForm() {
-  const { resumeData, setResumeData } = useResumeContext();
+  const { resumeData, setResumeData } = useResumeEditorContext();
 
   const form = useForm<WorkExperienceSchema>({
     resolver: zodResolver(workExperienceSchema),

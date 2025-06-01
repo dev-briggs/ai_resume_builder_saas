@@ -17,9 +17,9 @@ export function fileReplacer(key: string, value: unknown) {
     : value;
 }
 
-export async function mapServerToClientResumeValues(
+export function mapServerToClientResumeValues(
   data: ResumeServerData,
-): Promise<ResumeSchema> {
+): ResumeSchema {
   const {
     id,
     title,
