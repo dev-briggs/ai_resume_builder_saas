@@ -29,11 +29,13 @@ export const useResumePreviewContext = () => {
 export type ResumePreviewProps = {
   resumeData: ResumeSchema;
   className?: string;
+  contentRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 export default function ResumePreview({
   resumeData,
   className,
+  contentRef,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { width } = useDimensions(containerRef);
@@ -49,12 +51,14 @@ export default function ResumePreview({
         ref={containerRef}
       >
         <div
+          id="resume-preview-content"
           className={cn("space-y-6 p-6", !width && "invisible")}
           style={{
             zoom:
               (1 / 794) * // number of pixels for 210mm
               width,
           }}
+          ref={contentRef}
         >
           <PersonalInfoHeader />
           <SummarySection />

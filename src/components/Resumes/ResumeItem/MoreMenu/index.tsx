@@ -5,15 +5,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Trash2 } from "lucide-react";
+import { MoreVertical, Printer, Trash2 } from "lucide-react";
 import { useState } from "react";
 import DeleteConfirmationDialog from "../DeleteConfirmationDialog";
 
 type MoreMenuProps = {
   resumeId: string;
+  onPrintClick: () => void;
 };
 
-export function MoreMenu({ resumeId }: MoreMenuProps) {
+export function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   return (
@@ -35,6 +36,13 @@ export function MoreMenu({ resumeId }: MoreMenuProps) {
           >
             <Trash2 className="size-4" />
             Delete
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center gap-2"
+            onClick={onPrintClick}
+          >
+            <Printer className="size-4" />
+            Print
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

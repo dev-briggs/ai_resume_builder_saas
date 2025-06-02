@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { ResumeServerData } from "@/schema/resume";
 import Link from "next/link";
 import { formatDate } from "date-fns";
+import { useReactToPrint } from "react-to-print";
+
 import { timestampDateFormat } from "@/constants/date";
 import ResumePreview from "@/components/ResumeEditor/ResumePreview";
 import { mapServerToClientResumeValues } from "@/lib/utils";
@@ -14,6 +16,12 @@ export type ResumeItemProps = {
 };
 
 export default function ResumeItem({ resume }: ResumeItemProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const reactToPrintFn = useReactToPrint({
+    contentRef,
+    documentTitle: resume.title || "Untitled Resume",
+  });
   const wasUpdated = resume.updatedAt !== resume.createdAt;
   return (
     <div className="group hover:border-border bg-secondary relative rounded-lg border border-transparent p-3 transition-colors">
@@ -40,11 +48,12 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
           <ResumePreview
             resumeData={mapServerToClientResumeValues(resume)}
             className="overflow-hidden shadow-sm transition-shadow group-hover:shadow-lg"
+            contentRef={contentRef}
           />
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </Link>
       </div>
-      <MoreMenu resumeId={resume.id} />
+      <MoreMenu resumeId={resume.id} onPrintClick={reactToPrintFn} />
     </div>
   );
 }
