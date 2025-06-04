@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import * as React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { DayPicker, useNavigation } from "react-day-picker";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { format } from "date-fns";
 
 function Calendar({
   className,
@@ -21,11 +28,11 @@ function Calendar({
         months: "flex flex-col sm:flex-row gap-2",
         month: "flex flex-col gap-4",
         caption: "flex justify-center pt-1 relative items-center w-full",
-        caption_label: "text-sm font-medium",
+        caption_label: "text-sm font-medium hidden",
         nav: "flex items-center gap-1",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "size-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+          "size-7 bg-transparent p-0 opacity-50 hover:opacity-100",
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
@@ -38,11 +45,11 @@ function Calendar({
           "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-range-end)]:rounded-r-md",
           props.mode === "range"
             ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
-            : "[&:has([aria-selected])]:rounded-md"
+            : "[&:has([aria-selected])]:rounded-md",
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "size-8 p-0 font-normal aria-selected:opacity-100"
+          "size-8 p-0 font-normal aria-selected:opacity-100",
         ),
         day_range_start:
           "day-range-start aria-selected:bg-primary aria-selected:text-primary-foreground",
@@ -58,6 +65,7 @@ function Calendar({
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
         ...classNames,
+        caption_dropdowns: "flex items-center justify-between",
       }}
       components={{
         IconLeft: ({ className, ...props }) => (
@@ -66,10 +74,43 @@ function Calendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn("size-4", className)} {...props} />
         ),
+        Dropdown: ({ className, ...props }) => {
+          const selectItems =
+            props.children instanceof Array ? props.children : [];
+          const { goToMonth, currentMonth } = useNavigation();
+
+          return (
+            <Select
+              defaultValue={props.value?.toString()}
+              value={props.value?.toString()}
+              onValueChange={(newValue) => {
+                let newDate = new Date(currentMonth);
+                if (props.name === "months")
+                  newDate.setMonth(parseInt(newValue));
+                if (props.name === "years") {
+                  newDate.setFullYear(parseInt(newValue));
+                }
+                goToMonth(newDate);
+              }}
+            >
+              <SelectTrigger>
+                {props.name === "months" && format(currentMonth, "MMM")}
+                {props.name === "years" && currentMonth.getFullYear()}
+              </SelectTrigger>
+              <SelectContent>
+                {selectItems.map((item, i) => (
+                  <SelectItem key={i} value={item.props.value}>
+                    {item.props.children}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          );
+        },
       }}
       {...props}
     />
-  )
+  );
 }
 
-export { Calendar }
+export { Calendar };

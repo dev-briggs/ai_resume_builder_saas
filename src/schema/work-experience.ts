@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { optionalStringSchema } from "./common";
+import { isBefore } from "date-fns";
 
 export const workExperienceSchema = z.object({
   workExperiences: z
@@ -23,10 +24,10 @@ export const workExperienceSchema = z.object({
         .refine(
           ({ startDate, endDate }) => {
             if (!startDate || !endDate) return true;
-            return endDate > startDate;
+            return !isBefore(endDate, startDate);
           },
           {
-            message: "End date must be after start date",
+            message: "End date cannot be earlier than start date",
             path: ["endDate"],
           },
         ),
