@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import PremiumModal from "@/components/Premium/PremiumModal";
 import React from "react";
 
 export default function Layout({
@@ -10,6 +11,7 @@ export default function Layout({
     <div className="flex min-h-screen flex-col">
       <Navbar />
       {children}
+      <PremiumModal />
     </div>
   );
 }
