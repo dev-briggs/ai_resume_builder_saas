@@ -1,6 +1,8 @@
 "use server";
 
 import openai from "@/lib/openai";
+import { canUseAITools } from "@/lib/permissions";
+import { getUserSubscriptionLevel } from "@/lib/subscription";
 import {
   GENERATE_SUMMARY_SYSTEM_MESSAGE,
   GENERATE_WORK_EXPERIENCE_SYSTEM_MESSAGE,
@@ -15,9 +17,17 @@ import {
   generateWorkExperienceSchema,
   WorkExperienceItem,
 } from "@/schema/work-experience";
+import { auth } from "@clerk/nextjs/server";
 
 export async function generateSummary(input: GenerateSummarySchema) {
-  // TODO: Block for non-premium users
+  const { userId } = await auth();
+
+  if (!userId) throw new Error("Unauthorized");
+
+  const subscriptionLevel = await getUserSubscriptionLevel(userId);
+
+  if (!canUseAITools(subscriptionLevel))
+    throw new Error("Upgrade your subscription to use this feature.");
 
   const { jobTitle, workExperiences, educations, skills } =
     generateSummarySchema.parse(input);
@@ -28,9 +38,6 @@ export async function generateSummary(input: GenerateSummarySchema) {
     educations,
     skills,
   });
-
-  console.log("systemMessage:", GENERATE_SUMMARY_SYSTEM_MESSAGE);
-  console.log("userMessage:", userMessage);
 
   try {
     const completion = await openai.chat.completions.create({
@@ -63,7 +70,14 @@ export async function generateSummary(input: GenerateSummarySchema) {
 export async function generateWorkExperience(
   input: GenerateWorkExperienceSchema,
 ) {
-  // TODO: Block for non-premium users
+  const { userId } = await auth();
+
+  if (!userId) throw new Error("Unauthorized");
+
+  const subscriptionLevel = await getUserSubscriptionLevel(userId);
+
+  if (!canUseAITools(subscriptionLevel))
+    throw new Error("Upgrade your subscription to use this feature.");
 
   const { description } = generateWorkExperienceSchema.parse(input);
 

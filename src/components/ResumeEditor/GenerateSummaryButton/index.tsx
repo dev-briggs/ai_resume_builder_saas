@@ -4,6 +4,9 @@ import { useResumeEditorContext } from "@/components/ResumeEditor";
 import LoadingButton from "@/components/ui/loading-button";
 import { WandSparklesIcon } from "lucide-react";
 import { generateSummary } from "@/app/(main)/editor/forms/actions";
+import { userSubscriptionLevelContext } from "@/components/Providers/SubscriptionLevelProvider";
+import usePremiumModalStore from "@/store/premium-modal.store";
+import { canUseAITools } from "@/lib/permissions";
 
 export type GenerateSummaryButtonProps = {
   onSummaryGenerated: (summary: string) => void;
@@ -12,11 +15,17 @@ export type GenerateSummaryButtonProps = {
 export default function GenerateSummaryButton({
   onSummaryGenerated,
 }: GenerateSummaryButtonProps) {
+  const { userSubscriptionLevel } = userSubscriptionLevelContext();
+  const premiumModal = usePremiumModalStore();
+
   const { resumeData } = useResumeEditorContext();
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
-    // TODO: Block for non-premium users
+    if (!canUseAITools(userSubscriptionLevel)) {
+      premiumModal.setOpen(true);
+      return;
+    }
     try {
       setLoading(true);
       const aiResponse = await generateSummary(resumeData);

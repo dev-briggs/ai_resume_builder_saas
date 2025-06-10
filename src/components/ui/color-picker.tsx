@@ -3,6 +3,9 @@ import { Color, ColorChangeHandler, TwitterPicker } from "react-color";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Button } from "./button";
 import { PaletteIcon } from "lucide-react";
+import { userSubscriptionLevelContext } from "../Providers/SubscriptionLevelProvider";
+import { canUseCustomizations } from "@/lib/permissions";
+import usePremiumModalStore from "@/store/premium-modal.store";
 
 export type ColorPickerProps = {
   color?: Color;
@@ -10,9 +13,21 @@ export type ColorPickerProps = {
 };
 
 export default function ColorPicker({ color, onChange }: ColorPickerProps) {
+  const { userSubscriptionLevel } = userSubscriptionLevelContext();
+  const premiumModal = usePremiumModalStore();
+
   const [showPopover, setShowPopover] = useState(false);
   return (
-    <Popover open={showPopover} onOpenChange={setShowPopover}>
+    <Popover
+      open={showPopover}
+      onOpenChange={(open) => {
+        if (!canUseCustomizations(userSubscriptionLevel)) {
+          premiumModal.setOpen(true);
+          return;
+        }
+        setShowPopover(open);
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"

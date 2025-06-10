@@ -1,4 +1,5 @@
 import { generateWorkExperience } from "@/app/(main)/editor/forms/actions";
+import { userSubscriptionLevelContext } from "@/components/Providers/SubscriptionLevelProvider";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,11 +18,13 @@ import {
 } from "@/components/ui/form";
 import LoadingButton from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
+import { canUseAITools } from "@/lib/permissions";
 import {
   generateWorkExperienceSchema,
   GenerateWorkExperienceSchema,
   WorkExperienceItem,
 } from "@/schema/work-experience";
+import usePremiumModalStore from "@/store/premium-modal.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WandSparklesIcon } from "lucide-react";
 import { useState } from "react";
@@ -35,6 +38,9 @@ export type GenerateWorkExperienceButtonProps = {
 export default function GenerateWorkExperienceButton({
   onWorkExperienceGenerated,
 }: GenerateWorkExperienceButtonProps) {
+  const { userSubscriptionLevel } = userSubscriptionLevelContext();
+  const premiumModal = usePremiumModalStore();
+
   const [showDialog, setShowDialog] = useState(false);
 
   return (
@@ -42,10 +48,13 @@ export default function GenerateWorkExperienceButton({
       <Button
         variant="outline"
         type="button"
-        onClick={
-          // TODO: block for non-premium users
-          () => setShowDialog(true)
-        }
+        onClick={() => {
+          if (!canUseAITools(userSubscriptionLevel)) {
+            premiumModal.setOpen(true);
+            return;
+          }
+          setShowDialog(true);
+        }}
       >
         <WandSparklesIcon className="size-4" />
         Smart fill (AI)

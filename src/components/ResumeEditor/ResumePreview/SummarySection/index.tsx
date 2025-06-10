@@ -4,6 +4,9 @@ import { useResumePreviewContext } from "@/components/ResumeEditor/ResumePreview
 export default function SummarySection() {
   const { resumeData } = useResumePreviewContext();
   const { summary, colorHex } = resumeData;
+
+  if (!summary) return null;
+
   return (
     <>
       <hr className="border-2" style={{ borderColor: colorHex }} />
