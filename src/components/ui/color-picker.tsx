@@ -18,22 +18,19 @@ export default function ColorPicker({ color, onChange }: ColorPickerProps) {
 
   const [showPopover, setShowPopover] = useState(false);
   return (
-    <Popover
-      open={showPopover}
-      onOpenChange={(open) => {
-        if (!canUseCustomizations(userSubscriptionLevel)) {
-          premiumModal.setOpen(true);
-          return;
-        }
-        setShowPopover(open);
-      }}
-    >
+    <Popover open={showPopover} onOpenChange={setShowPopover}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           size="icon"
           title="Change resume color"
-          onClick={() => setShowPopover(true)}
+          onClick={() => {
+            if (!canUseCustomizations(userSubscriptionLevel)) {
+              premiumModal.setOpen(true);
+              return;
+            }
+            setShowPopover(true);
+          }}
         >
           <PaletteIcon className="size-5" />
         </Button>
