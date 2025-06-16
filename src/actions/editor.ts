@@ -63,9 +63,7 @@ export async function saveResume(values: ResumeSchema) {
       newPhotoUrl = blob.url;
     } catch (e) {
       console.error("vercel blob put error:", e);
-      throw new Error(
-        e instanceof Error ? e.message : "Failed to upload photo.",
-      );
+      throw new Error("Failed to upload photo.");
     }
   } else if (photo === null) {
     newPhotoUrl = null;
