@@ -3,13 +3,14 @@ import PremiumModal from "@/components/Premium/PremiumModal";
 import SubscriptionLevelProvider from "@/components/Providers/SubscriptionLevelProvider";
 import { getUserSubscriptionLevel } from "@/lib/subscription";
 import { auth } from "@clerk/nextjs/server";
+import { unauthorized } from "next/navigation";
 import React from "react";
 
 export default async function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const { userId } = await auth();
-  if (!userId) return null;
+  if (!userId) unauthorized();
 
   const userSubscriptionLevel = await getUserSubscriptionLevel(userId);
 

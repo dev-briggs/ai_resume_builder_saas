@@ -18,11 +18,12 @@ import {
   WorkExperienceItem,
 } from "@/schema/work-experience";
 import { auth } from "@clerk/nextjs/server";
+import { unauthorized } from "next/navigation";
 
 export async function generateSummary(input: GenerateSummarySchema) {
   const { userId } = await auth();
 
-  if (!userId) throw new Error("Unauthorized");
+  if (!userId) unauthorized();
 
   const subscriptionLevel = await getUserSubscriptionLevel(userId);
 
@@ -72,7 +73,7 @@ export async function generateWorkExperience(
 ) {
   const { userId } = await auth();
 
-  if (!userId) throw new Error("Unauthorized");
+  if (!userId) unauthorized();
 
   const subscriptionLevel = await getUserSubscriptionLevel(userId);
 

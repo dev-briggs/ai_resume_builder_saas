@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { resumeDataInclude } from "@/schema/resume";
 import { mapServerToClientResumeValues } from "@/lib/utils";
 import ResumeEditor from "@/components/ResumeEditor";
+import { unauthorized } from "next/navigation";
 
 export type PageProps = {
   searchParams: Promise<{
@@ -20,7 +21,7 @@ export default async function Page({ searchParams }: PageProps) {
   const { resumeId } = await searchParams;
   const { userId } = await auth();
 
-  if (!userId) return null;
+  if (!userId) unauthorized();
 
   const resumeToEdit = resumeId
     ? await prisma.resume.findUnique({

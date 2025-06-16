@@ -6,6 +6,7 @@ import { getUserSubscriptionLevel } from "@/lib/subscription";
 import { resumeDataInclude } from "@/schema/resume";
 import { auth } from "@clerk/nextjs/server";
 import { Metadata } from "next";
+import { unauthorized } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Your Resumes",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   const { userId } = await auth();
 
-  if (!userId) return null;
+  if (!userId) unauthorized();
 
   const [resumes, totalCount, subscriptionLevel] = await Promise.all([
     prisma.resume.findMany({

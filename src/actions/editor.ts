@@ -6,12 +6,13 @@ import { getUserSubscriptionLevel } from "@/lib/subscription";
 import { resumeSchema, ResumeSchema } from "@/schema/resume";
 import { auth } from "@clerk/nextjs/server";
 import { del, put } from "@vercel/blob";
+import { unauthorized } from "next/navigation";
 import path from "path";
 
 export async function saveResume(values: ResumeSchema) {
   const { userId } = await auth();
 
-  if (!userId) throw new Error("User not authenticated");
+  if (!userId) unauthorized();
 
   const { id } = values;
 

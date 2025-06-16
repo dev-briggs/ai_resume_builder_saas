@@ -1,4 +1,4 @@
-import { deleteResume } from "@/app/(main)/resumes/actions";
+import { deleteResume } from "@/actions/resume";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

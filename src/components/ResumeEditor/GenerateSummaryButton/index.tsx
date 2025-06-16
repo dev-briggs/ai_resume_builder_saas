@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useResumeEditorContext } from "@/components/ResumeEditor";
 import LoadingButton from "@/components/ui/loading-button";
 import { WandSparklesIcon } from "lucide-react";
-import { generateSummary } from "@/app/(main)/editor/forms/actions";
+import { generateSummary } from "@/actions/form";
 import { userSubscriptionLevelContext } from "@/components/Providers/SubscriptionLevelProvider";
 import usePremiumModalStore from "@/store/premium-modal.store";
 import { canUseAITools } from "@/lib/permissions";

@@ -3,7 +3,7 @@ import { ResumeSchema } from "@/schema/resume";
 import useDebouncedValue from "./useDebouncedValue";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { saveResume } from "@/app/(main)/editor/actions";
+import { saveResume } from "@/actions/editor";
 import { Button } from "@/components/ui/button";
 import { fileReplacer } from "@/lib/utils";
 

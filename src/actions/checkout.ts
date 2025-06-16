@@ -3,11 +3,12 @@
 import { env } from "@/env";
 import stripe from "@/lib/stripe";
 import { currentUser } from "@clerk/nextjs/server";
+import { unauthorized } from "next/navigation";
 
 export async function createCheckoutSession(priceId: string) {
   console.log("createCheckoutSession called with:", priceId);
   const user = await currentUser();
-  if (!user) throw new Error("Unauthorized");
+  if (!user) unauthorized();
 
   const stripeCustomerId = user.privateMetadata.stripeCustomerId as
     | string

@@ -4,11 +4,12 @@ import prisma from "@/lib/prisma-client";
 import { auth } from "@clerk/nextjs/server";
 import { del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
+import { unauthorized } from "next/navigation";
 
 export async function deleteResume(id: string) {
   const { userId } = await auth();
 
-  if (!userId) throw new Error("User not authenticated");
+  if (!userId) unauthorized();
 
   const resume = await prisma.resume.findUnique({
     where: { id, userId },

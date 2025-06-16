@@ -1,4 +1,4 @@
-import { generateWorkExperience } from "@/app/(main)/editor/forms/actions";
+import { generateWorkExperience } from "@/actions/form";
 import { userSubscriptionLevelContext } from "@/components/Providers/SubscriptionLevelProvider";
 import { Button } from "@/components/ui/button";
 import {
